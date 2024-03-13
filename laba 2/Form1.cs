@@ -23,7 +23,8 @@ namespace laba_2
             InitializeComponent();
             drawing = false;
             currentPen = new Pen(Color.Black);
-            
+            hScrollBar2.Minimum = 0;
+            hScrollBar2.Maximum = 255;
             History = new List<Image>();
             
 
@@ -143,7 +144,7 @@ namespace laba_2
             if (picDrawingSurface.Image == null)
             {
 
-                MessageBox.Show("Сначала создайте новый файл!");
+                MessageBox.Show("Сначала создайте новый файл!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -287,7 +288,7 @@ namespace laba_2
             {
                 picDrawingSurface.Image = new Bitmap(History[--historyCounter]);
             }
-            else MessageBox.Show("История пуста");
+            else MessageBox.Show("История пуста", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void redoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -355,6 +356,19 @@ namespace laba_2
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void hScrollBar2_Scroll(object sender, ScrollEventArgs e)
+        {
+            Color col = currentPen.Color;
+            currentPen.Color = Color.FromArgb(hScrollBar2.Value, col);
+
+            label4.Text = Convert.ToString((100 * hScrollBar2.Value) / 255) + "%";
         }
 
         private void hScrollBar1_Scroll(object sender, ScrollEventArgs e)
