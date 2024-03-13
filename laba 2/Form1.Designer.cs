@@ -118,6 +118,7 @@
             this.hScrollBar1.Size = new System.Drawing.Size(136, 26);
             this.hScrollBar1.TabIndex = 2;
             this.hScrollBar1.Value = 1;
+            this.hScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.hScrollBar1_Scroll);
             this.hScrollBar1.ValueChanged += new System.EventHandler(this.hScrollBar1_ValueChanged);
             // 
             // BottomToolStripPanel
@@ -315,7 +316,7 @@
             this.aboutToolStripMenuItem.Image = global::laba_2.Properties.Resources.inf_icon;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(157, 26);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 

@@ -7,7 +7,8 @@ namespace laba_2
 
     public partial class Form1 : Form
     {
-       //using callmet = Form1.newToolStripMenuItem_Click();
+        //using callmet = Form1.newToolStripMenuItem_Click();
+        private int x, y;
         bool drawing;
         GraphicsPath currentPath = null;
         Point oldLocation;
@@ -35,6 +36,8 @@ namespace laba_2
             Bitmap pic = new Bitmap(picDrawingSurface.Width, picDrawingSurface.Height);
             picDrawingSurface.Image = pic;
             History.Add(new Bitmap(picDrawingSurface.Image));
+            x = picDrawingSurface.Width;
+            y = picDrawingSurface.Height;
         }
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
@@ -67,8 +70,17 @@ namespace laba_2
                     MessageBox.Show("Для начала создайте файл!");
                 else
                 {
+                    
                     Image img = Image.FromFile(OP.FileName);
-                    picDrawingSurface.Image = img;
+                    if (img.Width > x || img.Height > y)
+                    {
+                        MessageBox.Show("Измените размер окна или выберите другое изображение!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    else
+                    {
+                        picDrawingSurface.Image = img;
+                    }
                 }
                 //image1 = new Bitmap(fd.FileName, true);
                 
@@ -343,6 +355,11 @@ namespace laba_2
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             
+        }
+
+        private void hScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        {
+
         }
     }
 
