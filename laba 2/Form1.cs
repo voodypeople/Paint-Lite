@@ -31,9 +31,12 @@ namespace laba_2
         }
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
             checkedornot = true;
             History.Clear();
             historyCounter = 0;
+            panel3.Width = Form1.ActiveForm.Width; picDrawingSurface.Height = Form1.ActiveForm.Height+300 ;
+            picDrawingSurface.Width = panel3.Width; picDrawingSurface.Height = panel3.Height;
             Bitmap pic = new Bitmap(picDrawingSurface.Width, picDrawingSurface.Height);
             picDrawingSurface.Image = pic;
             History.Add(new Bitmap(picDrawingSurface.Image));
@@ -73,7 +76,8 @@ namespace laba_2
                 {
                     
                     Image img = Image.FromFile(OP.FileName);
-                    if (img.Width > x || img.Height > y)
+                    picDrawingSurface.Image = img;
+                    /*if (img.Width > x || img.Height > y)
                     {
                         MessageBox.Show("Измените размер окна или выберите другое изображение!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
@@ -82,6 +86,7 @@ namespace laba_2
                     {
                         picDrawingSurface.Image = img;
                     }
+                    */
                 }
                 //image1 = new Bitmap(fd.FileName, true);
                 
@@ -160,8 +165,8 @@ namespace laba_2
         {
             History.RemoveRange(historyCounter + 1, History.Count - historyCounter - 1);
             History.Add(new Bitmap(picDrawingSurface.Image));
-            if (historyCounter + 1 < 10) historyCounter++;
-            if (History.Count - 1 == 10) History.RemoveAt(0);
+            if (historyCounter + 1 < 100) historyCounter++;
+            if (History.Count - 1 == 100) History.RemoveAt(0);
             drawing = false;
             try
             {
@@ -297,7 +302,7 @@ namespace laba_2
             {
                 picDrawingSurface.Image = new Bitmap(History[++historyCounter]);
             }
-            else MessageBox.Show("История пуста");
+            else MessageBox.Show("История пуста", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void dotToolStripMenuItem_Click(object sender, EventArgs e)
@@ -369,6 +374,16 @@ namespace laba_2
             currentPen.Color = Color.FromArgb(hScrollBar2.Value, col);
 
             label4.Text = Convert.ToString((100 * hScrollBar2.Value) / 255) + "%";
+        }
+
+        private void panel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel3_Paint_1(object sender, PaintEventArgs e)
+        {
+
         }
 
         private void hScrollBar1_Scroll(object sender, ScrollEventArgs e)
