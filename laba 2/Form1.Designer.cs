@@ -60,6 +60,8 @@
             this.hScrollBar2 = new System.Windows.Forms.HScrollBar();
             this.label4 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.picDrawingSurface)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -70,13 +72,13 @@
             // picDrawingSurface
             // 
             this.picDrawingSurface.BackColor = System.Drawing.SystemColors.Control;
-            this.picDrawingSurface.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picDrawingSurface.Location = new System.Drawing.Point(41, 0);
+            this.picDrawingSurface.Location = new System.Drawing.Point(40, 15);
             this.picDrawingSurface.Name = "picDrawingSurface";
             this.picDrawingSurface.Size = new System.Drawing.Size(950, 500);
             this.picDrawingSurface.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.picDrawingSurface.TabIndex = 1;
             this.picDrawingSurface.TabStop = false;
+            this.picDrawingSurface.SizeChanged += new System.EventHandler(this.picDrawingSurface_SizeChanged);
             this.picDrawingSurface.Click += new System.EventHandler(this.picDrawingSurface_Click);
             this.picDrawingSurface.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picDrawingSurface_MouseDown);
             this.picDrawingSurface.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picDrawingSurface_MouseMove);
@@ -335,11 +337,9 @@
             // 
             // hScrollBar2
             // 
-            this.hScrollBar2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.hScrollBar2.Location = new System.Drawing.Point(583, 16);
             this.hScrollBar2.Name = "hScrollBar2";
-            this.hScrollBar2.Size = new System.Drawing.Size(290, 26);
+            this.hScrollBar2.Size = new System.Drawing.Size(311, 26);
             this.hScrollBar2.TabIndex = 6;
             this.hScrollBar2.Scroll += new System.Windows.Forms.ScrollEventHandler(this.hScrollBar2_Scroll);
             // 
@@ -354,44 +354,67 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.panel1.Controls.Add(this.label6);
+            this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.hScrollBar2);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.hScrollBar1);
-            this.panel1.Location = new System.Drawing.Point(192, 605);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 614);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(879, 64);
+            this.panel1.Size = new System.Drawing.Size(1100, 67);
             this.panel1.TabIndex = 3;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(975, 36);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(28, 20);
+            this.label6.TabIndex = 9;
+            this.label6.Text = "0;0";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(957, 5);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(109, 20);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Размер холста";
             // 
             // panel3
             // 
-            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel3.AutoScroll = true;
             this.panel3.Controls.Add(this.picDrawingSurface);
-            this.panel3.Location = new System.Drawing.Point(34, 31);
+            this.panel3.Location = new System.Drawing.Point(30, 31);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1031, 568);
+            this.panel3.Size = new System.Drawing.Size(1022, 537);
             this.panel3.TabIndex = 5;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ControlDark;
             this.ClientSize = new System.Drawing.Size(1100, 681);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.panel3);
+            this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MinimumSize = new System.Drawing.Size(1118, 728);
             this.Name = "Form1";
             this.Text = "Paint Lite";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.picDrawingSurface)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -437,5 +460,7 @@
         private Label label4;
         private Panel panel1;
         private Panel panel3;
+        private Label label6;
+        private Label label5;
     }
 }

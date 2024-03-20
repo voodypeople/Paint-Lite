@@ -8,6 +8,7 @@ namespace laba_2
     public partial class Form1 : Form
     {
         //using callmet = Form1.newToolStripMenuItem_Click();
+        int main_width, main_height;
         private int x, y;
         bool drawing;
         GraphicsPath currentPath = null;
@@ -26,22 +27,27 @@ namespace laba_2
             hScrollBar2.Minimum = 0;
             hScrollBar2.Maximum = 255;
             History = new List<Image>();
+            main_width = this.Width; main_height = this.Height;
             
 
         }
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            //main_width = this.Width; main_height = this.Height;
             checkedornot = true;
             History.Clear();
             historyCounter = 0;
-            panel3.Width = Form1.ActiveForm.Width; picDrawingSurface.Height = Form1.ActiveForm.Height+300 ;
-            picDrawingSurface.Width = panel3.Width; picDrawingSurface.Height = panel3.Height;
-            Bitmap pic = new Bitmap(picDrawingSurface.Width, picDrawingSurface.Height);
+            panel3.Width = main_width - main_width / 8; panel3.Height = main_height - main_height / 5;
+            picDrawingSurface.Width = panel3.Width - panel3.Width / 10; picDrawingSurface.Height = panel3.Height - panel3.Height / 10;
+            //Bitmap pic = new Bitmap(picDrawingSurface.Bounds.Width, picDrawingSurface.Bounds.Height);
+            Bitmap pic = new Bitmap(panel3.Width - panel3.Width / 10, panel3.Height - panel3.Height / 10);
             picDrawingSurface.Image = pic;
             History.Add(new Bitmap(picDrawingSurface.Image));
-            x = picDrawingSurface.Width;
-            y = picDrawingSurface.Height;
+            label6.Text = picDrawingSurface.Bounds.Width.ToString() + ";" + picDrawingSurface.Bounds.Height.ToString();
+            //x = picDrawingSurface.Width;
+            //y = picDrawingSurface.Height;
+            //label6.Text = Convert.ToString(picDrawingSurface.Width-2)+ ";" + Convert.ToString( picDrawingSurface.Height-2);
+
         }
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
@@ -77,6 +83,7 @@ namespace laba_2
                     
                     Image img = Image.FromFile(OP.FileName);
                     picDrawingSurface.Image = img;
+                    label6.Text = picDrawingSurface.Bounds.Width.ToString() + ";" + picDrawingSurface.Bounds.Height.ToString();
                     /*if (img.Width > x || img.Height > y)
                     {
                         MessageBox.Show("Измените размер окна или выберите другое изображение!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -384,6 +391,18 @@ namespace laba_2
         private void panel3_Paint_1(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void picDrawingSurface_SizeChanged(object sender, EventArgs e)
+        {
+            //label6.Text = picDrawingSurface.Bounds.Width.ToString() + ";" + picDrawingSurface.Bounds.Height.ToString();
+            //label6.Text = Convert.ToString(picDrawingSurface.Width - 2) + ";" + Convert.ToString(picDrawingSurface.Height - 2);
+        }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            main_width = this.Width; 
+            main_height = this.Height;
         }
 
         private void hScrollBar1_Scroll(object sender, ScrollEventArgs e)

@@ -40,7 +40,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "About";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Инфрмация о приложении";
+            this.Text = "Информация о приложении";
             this.ResumeLayout(false);
 
         }
