@@ -1,13 +1,23 @@
 using System.Drawing.Drawing2D;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System;
+using System.Windows.Forms;
+
+
 
 namespace laba_2
 {
 
     public partial class Form1 : Form
     {
+
+        private Point mousePos1;
+        private Point mousePos2;
+        private DraggedFragment draggedFragment;
+        private bool Checked_to_drag = false;
         //using callmet = Form1.newToolStripMenuItem_Click();
+      
         int main_width, main_height;
         private int x, y;
         bool drawing;
@@ -28,7 +38,7 @@ namespace laba_2
             hScrollBar2.Maximum = 255;
             History = new List<Image>();
             main_width = this.Width; main_height = this.Height;
-            
+            //this.picDrawingSurface.MouseWheel += picDrawingSurface_MoustWheel;
 
         }
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -44,6 +54,7 @@ namespace laba_2
             picDrawingSurface.Image = pic;
             History.Add(new Bitmap(picDrawingSurface.Image));
             label6.Text = picDrawingSurface.Bounds.Width.ToString() + ";" + picDrawingSurface.Bounds.Height.ToString();
+            if (checkBox1.Checked == true) { checkBox1.Checked = false; Checked_to_drag = false; }
             //x = picDrawingSurface.Width;
             //y = picDrawingSurface.Height;
             //label6.Text = Convert.ToString(picDrawingSurface.Width-2)+ ";" + Convert.ToString( picDrawingSurface.Height-2);
@@ -77,13 +88,18 @@ namespace laba_2
 
 
                 if (checkedornot == false)
-                    MessageBox.Show("Для начала создайте файл!");
+                {
+                    MessageBox.Show("Для начала создайте файл!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
                 else
                 {
-                    
+
                     Image img = Image.FromFile(OP.FileName);
                     picDrawingSurface.Image = img;
                     label6.Text = picDrawingSurface.Bounds.Width.ToString() + ";" + picDrawingSurface.Bounds.Height.ToString();
+                    
+                    if(checkBox1.Checked == true) { checkBox1.Checked= false; Checked_to_drag = false; }
                     /*if (img.Width > x || img.Height > y)
                     {
                         MessageBox.Show("Измените размер окна или выберите другое изображение!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -109,6 +125,10 @@ namespace laba_2
 
         public void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(picDrawingSurface.Image == null)
+            {
+                MessageBox.Show("Сначала создайте файл!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Information); return; 
+            }
             SaveFileDialog SaveDlg = new SaveFileDialog();
             SaveDlg.Filter = "JPEG Image|*.jpg|Bitmap Image|*.bmp|GIF Image|*.gif|PNG Image | *.png";
             SaveDlg.Title = "Save an Image File";
@@ -148,7 +168,22 @@ namespace laba_2
             About form = new About();
             form.Owner = this;
             form.ShowDialog();
-
+            
+        }
+        private void picDrawingSurface_MoustWheel(object sender, MouseEventArgs e)
+        {
+            if(e.Delta> 0) 
+            {
+                picDrawingSurface.Width = picDrawingSurface.Width + 50;
+                picDrawingSurface.Height = picDrawingSurface.Height + 50;
+            
+            }
+            else
+            {
+                picDrawingSurface.Width = picDrawingSurface.Width - 50;
+                picDrawingSurface.Height = picDrawingSurface.Height - 50;
+            }
+            //MessageBox.Show("wheel", "");
         }
 
         private void picDrawingSurface_MouseDown(object sender, MouseEventArgs e)
@@ -159,17 +194,58 @@ namespace laba_2
                 MessageBox.Show("Сначала создайте новый файл!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+            else if(picDrawingSurface.Image != null && checkBox1.Checked == true) {
+                if (draggedFragment != null && !draggedFragment.Rect.Contains(e.Location))
+                {
+                    //уничтожаем фрагмент
+                    draggedFragment = null;
+                    picDrawingSurface.Invalidate();
+                }
+                return;
+            }
 
-            if (e.Button == MouseButtons.Left)
+            if (checkBox1.Checked == false)
             {
-                drawing = true;
-                oldLocation = e.Location;
-                currentPath = new GraphicsPath();
+                if (e.Button == MouseButtons.Left)
+                {
+                    drawing = true;
+                    oldLocation = e.Location;
+                    currentPath = new GraphicsPath();
+                }
             }
         }
-
+        Rectangle GetRect(Point p1, Point p2)
+        {
+            var x1 = Math.Min(p1.X, p2.X);
+            var x2 = Math.Max(p1.X, p2.X);
+            var y1 = Math.Min(p1.Y, p2.Y);
+            var y2 = Math.Max(p1.Y, p2.Y);
+            return new Rectangle(x1, y1, x2 - x1, y2 - y1);
+        }
         private void picDrawingSurface_MouseUp(object sender, MouseEventArgs e)
         {
+            if(checkBox1.Checked == true) {
+
+                if (mousePos1 != mousePos2)
+                {
+                    //создаем DraggedFragment
+                    var rect = GetRect(mousePos1, mousePos2);
+                    draggedFragment = new DraggedFragment() { SourceRect = rect, Location = rect.Location };
+                }
+                else
+                {
+                    //пользователь сдвинул фрагмент и отпутил мышь?
+                    if (draggedFragment != null)
+                    {
+                        //фиксируем изменения в исходном изображении
+                        draggedFragment.Fix(picDrawingSurface.Image);
+                        //уничтожаем фрагмент
+                        draggedFragment = null;
+                        mousePos1 = mousePos2 = e.Location;
+                    }
+                }
+                picDrawingSurface.Invalidate();
+            }
             History.RemoveRange(historyCounter + 1, History.Count - historyCounter - 1);
             History.Add(new Bitmap(picDrawingSurface.Image));
             if (historyCounter + 1 < 100) historyCounter++;
@@ -186,10 +262,32 @@ namespace laba_2
                 currentPath.Dispose();
             }
             catch { };
+            //picDrawingSurface.Invalidate();
         }
 
         private void picDrawingSurface_MouseMove(object sender, MouseEventArgs e)
         {
+            if(checkBox1.Checked == true) 
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    //юзер тянет фрагмент?
+                    if (draggedFragment != null)
+                    {
+                        //сдвигаем фрагмент
+                        draggedFragment.Location.Offset(e.Location.X - mousePos2.X, e.Location.Y - mousePos2.Y);
+                        mousePos1 = e.Location;
+                    }
+                    //сдвигаем выделенную область
+                    mousePos2 = e.Location;
+                    picDrawingSurface.Invalidate();
+                }
+                else
+                {
+                    mousePos1 = mousePos2 = e.Location;
+                }
+                return;
+            }
             if (drawing)
             {
                 Graphics g = Graphics.FromImage(picDrawingSurface.Image);
@@ -199,6 +297,7 @@ namespace laba_2
                 g.Dispose();
                 picDrawingSurface.Invalidate();
             }
+            
 
         }
 
@@ -399,6 +498,66 @@ namespace laba_2
             //label6.Text = Convert.ToString(picDrawingSurface.Width - 2) + ";" + Convert.ToString(picDrawingSurface.Height - 2);
         }
 
+        private void eraserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(picDrawingSurface.Image == null)
+            {
+                Environment.Exit(0);
+            }
+            var result = MessageBox.Show("Сохранить изменения перед выходом?", "Информация", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+            if(result == DialogResult.Yes)
+            {
+                saveToolStripMenuItem_Click(null, null);
+            }
+            else
+                Environment.Exit(0);
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if(checkBox1.Checked && picDrawingSurface.Image != null) {
+                Checked_to_drag = true;
+                picDrawingSurface.Image = new Bitmap(History[historyCounter]);
+            }
+            //else { 
+                
+            //    //MessageBox.Show("Для начала создайте файл!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
+            //    return;
+            //}
+        }
+
+        private void picDrawingSurface_Paint(object sender, PaintEventArgs e)
+        {
+            if (draggedFragment != null)
+            {
+                //рисуем вырезанное белое место
+                e.Graphics.SetClip(draggedFragment.SourceRect);
+                e.Graphics.Clear(Color.White);
+
+                //рисуем сдвинутый фрагмент
+                
+                e.Graphics.SetClip(draggedFragment.Rect);
+                e.Graphics.DrawImage(picDrawingSurface.Image, draggedFragment.Location.X - draggedFragment.SourceRect.X, draggedFragment.Location.Y - draggedFragment.SourceRect.Y);
+
+                //рисуем рамку
+                e.Graphics.ResetClip();
+                ControlPaint.DrawFocusRectangle(e.Graphics, draggedFragment.Rect);
+            }
+            else
+            {
+                //если выделена область
+                if (mousePos1 != mousePos2)
+                    ControlPaint.DrawFocusRectangle(e.Graphics, GetRect(mousePos1, mousePos2));//рисуем рамку
+            }
+        }
+
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
             main_width = this.Width; 
@@ -411,6 +570,33 @@ namespace laba_2
         }
     }
 
-    
+    class DraggedFragment
+    {
+        public Rectangle SourceRect;//прямоугольник фрагмента в исходном изображении
+        public Point Location;//положение сдвинутого фрагмента
+
+        //прямоугольник сдвинутого фрагмента
+        public Rectangle Rect
+        {
+            get { return new Rectangle(Location, SourceRect.Size); }
+        }
+
+        //фиксация изменений в исх изображении
+        public void Fix(Image image)
+        {
+            using (var clone = (Image)image.Clone())
+            using (var gr = Graphics.FromImage(image))
+            {
+                //рисуем вырезанное белое место
+                gr.SetClip(SourceRect);
+                gr.Clear(Color.White);
+
+                //рисуем сдвинутый фрагмент
+                gr.SetClip(Rect);
+                gr.DrawImage(clone, Location.X - SourceRect.X, Location.Y - SourceRect.Y);
+            }
+        }
+    }
+
     
 }
