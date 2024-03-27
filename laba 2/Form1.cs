@@ -38,6 +38,7 @@ namespace laba_2
             hScrollBar2.Maximum = 255;
             History = new List<Image>();
             main_width = this.Width; main_height = this.Height;
+            picDrawingSurface.BackColor= Color.White;
             //this.picDrawingSurface.MouseWheel += picDrawingSurface_MoustWheel;
 
         }
@@ -51,7 +52,9 @@ namespace laba_2
             picDrawingSurface.Width = panel3.Width - panel3.Width / 10; picDrawingSurface.Height = panel3.Height - panel3.Height / 10;
             //Bitmap pic = new Bitmap(picDrawingSurface.Bounds.Width, picDrawingSurface.Bounds.Height);
             Bitmap pic = new Bitmap(panel3.Width - panel3.Width / 10, panel3.Height - panel3.Height / 10);
+            
             picDrawingSurface.Image = pic;
+            picDrawingSurface.BackColor = Color.White;
             History.Add(new Bitmap(picDrawingSurface.Image));
             label6.Text = picDrawingSurface.Bounds.Width.ToString() + ";" + picDrawingSurface.Bounds.Height.ToString();
             if (checkBox1.Checked == true) { checkBox1.Checked = false; Checked_to_drag = false; }
@@ -589,8 +592,8 @@ namespace laba_2
             {
                 //рисуем вырезанное белое место
                 gr.SetClip(SourceRect);
-                gr.Clear(Color.White);
-
+                //gr.Clear(Color.White);
+                gr.Clear(Color.Transparent);
                 //рисуем сдвинутый фрагмент
                 gr.SetClip(Rect);
                 gr.DrawImage(clone, Location.X - SourceRect.X, Location.Y - SourceRect.Y);
