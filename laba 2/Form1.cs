@@ -11,7 +11,13 @@ namespace laba_2
 
     public partial class Form1 : Form
     {
+        private Rectangle rectang;
 
+        private bool Done_Painting = false;
+
+        private Point LastPos2;
+        private Point LastPos1;
+        private bool Draw_Rectangle = false;
         private Point mousePos1;
         private Point mousePos2;
         private DraggedFragment draggedFragment;
@@ -33,7 +39,9 @@ namespace laba_2
         {
             InitializeComponent();
             drawing = false;
-            currentPen = new Pen(Color.Black);
+            //currentPen = new Pen(Color.Black);
+            currentPen = new Pen(Color.Red, 5);
+            
             hScrollBar2.Minimum = 0;
             hScrollBar2.Maximum = 255;
             History = new List<Image>();
@@ -48,16 +56,24 @@ namespace laba_2
             checkedornot = true;
             History.Clear();
             historyCounter = 0;
-            panel3.Width = main_width - main_width / 8; panel3.Height = main_height - main_height / 5;
-            picDrawingSurface.Width = panel3.Width - panel3.Width / 10; picDrawingSurface.Height = panel3.Height - panel3.Height / 10;
+            panel3.Width = main_width - main_width / 8; panel3.Height = main_height - main_height / 4;
+            picDrawingSurface.Width = panel3.Width - panel3.Width / 10; picDrawingSurface.Height = panel3.Height - panel3.Height / 8;
             //Bitmap pic = new Bitmap(picDrawingSurface.Bounds.Width, picDrawingSurface.Bounds.Height);
-            Bitmap pic = new Bitmap(panel3.Width - panel3.Width / 10, panel3.Height - panel3.Height / 10);
+            Bitmap pic = new Bitmap(panel3.Width - panel3.Width / 10, panel3.Height - panel3.Height / 8);
             
             picDrawingSurface.Image = pic;
             picDrawingSurface.BackColor = Color.White;
             History.Add(new Bitmap(picDrawingSurface.Image));
             label6.Text = picDrawingSurface.Bounds.Width.ToString() + ";" + picDrawingSurface.Bounds.Height.ToString();
-            if (checkBox1.Checked == true) { checkBox1.Checked = false; Checked_to_drag = false; }
+            if (checkBox1.Checked == true) 
+            {
+                checkBox1.Checked = false; Checked_to_drag = false; 
+                
+            }
+            if (checkBox2.Checked == true)
+            {
+                checkBox2.Checked = false; Draw_Rectangle = false;
+            }
             //x = picDrawingSurface.Width;
             //y = picDrawingSurface.Height;
             //label6.Text = Convert.ToString(picDrawingSurface.Width-2)+ ";" + Convert.ToString( picDrawingSurface.Height-2);
@@ -81,6 +97,7 @@ namespace laba_2
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             picDrawingSurface.Visible = true;
+            
             OpenFileDialog OP = new OpenFileDialog();
             OP.Filter = "JPEG Image|*.jpg|Bitmap Image|*.bmp|GIF Image|*.gif|PNG Image | *.png";
              OP.Title = "Open an Image File";
@@ -96,13 +113,13 @@ namespace laba_2
                     return;
                 }
                 else
-                {
-
+                {                   
                     Image img = Image.FromFile(OP.FileName);
                     picDrawingSurface.Image = img;
                     label6.Text = picDrawingSurface.Bounds.Width.ToString() + ";" + picDrawingSurface.Bounds.Height.ToString();
                     
                     if(checkBox1.Checked == true) { checkBox1.Checked= false; Checked_to_drag = false; }
+                    if(checkBox2.Checked == true) { checkBox2.Checked = false; Draw_Rectangle = false; }
                     /*if (img.Width > x || img.Height > y)
                     {
                         MessageBox.Show("Измените размер окна или выберите другое изображение!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -225,8 +242,32 @@ namespace laba_2
             var y2 = Math.Max(p1.Y, p2.Y);
             return new Rectangle(x1, y1, x2 - x1, y2 - y1);
         }
+        
         private void picDrawingSurface_MouseUp(object sender, MouseEventArgs e)
         {
+            
+                LastPos2 = mousePos2;
+                LastPos1= mousePos1;    
+                
+            if(checkBox2.Checked)
+            {
+                if (mousePos1 != mousePos2)
+                {
+                    Brush br = new SolidBrush(Color.Black);
+                    
+                    //создаем DraggedFragment
+                    var rect = GetRect(mousePos1, mousePos2);
+                    rectang = rect;
+                    
+                    Graphics g = Graphics.FromImage(picDrawingSurface.Image);
+                        g.DrawRectangle(currentPen, rectang);
+                    g.FillRectangle(br, rectang);
+                    History.Add(new Bitmap(picDrawingSurface.Image));
+                    Done_Painting = true;
+
+                }
+            }
+            
             if(checkBox1.Checked == true) {
 
                 if (mousePos1 != mousePos2)
@@ -270,6 +311,28 @@ namespace laba_2
 
         private void picDrawingSurface_MouseMove(object sender, MouseEventArgs e)
         {
+            if(checkBox2.Checked)
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    //юзер тянет фрагмент?
+                    if (draggedFragment != null)
+                    {
+                        //сдвигаем фрагмент
+                        draggedFragment.Location.Offset(e.Location.X - mousePos2.X, e.Location.Y - mousePos2.Y);
+                        mousePos1 = e.Location;
+                    }
+                    //сдвигаем выделенную область
+                    mousePos2 = e.Location;
+                    picDrawingSurface.Invalidate();
+                }
+                else
+                {
+                    mousePos1 = mousePos2 = e.Location;
+                }
+                return;
+            }
+
             if(checkBox1.Checked == true) 
             {
                 if (e.Button == MouseButtons.Left)
@@ -527,7 +590,10 @@ namespace laba_2
             if(checkBox1.Checked && picDrawingSurface.Image != null) {
                 Checked_to_drag = true;
                 picDrawingSurface.Image = new Bitmap(History[historyCounter]);
+                Draw_Rectangle = false;
+                checkBox2.Checked = false;
             }
+
             //else { 
                 
             //    //MessageBox.Show("Для начала создайте файл!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -538,6 +604,37 @@ namespace laba_2
 
         private void picDrawingSurface_Paint(object sender, PaintEventArgs e)
         {
+            bool drawn = false;
+                if (checkBox2.Checked && draggedFragment != null)
+                {
+                    //e.Graphics.ResetClip();
+                    //ControlPaint.DrawFocusRectangle(e.Graphics, draggedFragment.Rect);
+                    //e.Graphics.DrawRectangle(currentPen, GetRect(mousePos1, mousePos2));
+                }
+            if (checkBox2.Checked)
+            {
+                if (mousePos1 != mousePos2)
+                {
+                    //ControlPaint.DrawFocusRectangle(e.Graphics, GetRect(mousePos1, mousePos2), Color.Black, Color.Black);//рисуем рамку
+                    if (picDrawingSurface.Image != null)
+                    {
+                        //Graphics g = Graphics.FromImage(picDrawingSurface.Image);
+                        if (Done_Painting)
+                        {
+                            //g.DrawRectangle(currentPen, GetRect(mousePos1, mousePos2));
+                            //g.DrawRectangle(currentPen, GetRect(LastPos1, LastPos2));
+                            picDrawingSurface.Invalidate();
+                            
+                        }//e.Graphics.DrawRectangle(currentPen, GetRect(mousePos1, mousePos2));
+                         //if (LastPos2 == mousePos2)
+                         //picDrawingSurface.Invalidate(); 
+                    }
+
+                }
+            }
+            
+        
+
             if (draggedFragment != null)
             {
                 //рисуем вырезанное белое место
@@ -559,6 +656,26 @@ namespace laba_2
                 if (mousePos1 != mousePos2)
                     ControlPaint.DrawFocusRectangle(e.Graphics, GetRect(mousePos1, mousePos2));//рисуем рамку
             }
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox2.Checked)
+            {
+                Draw_Rectangle = true;
+                Checked_to_drag= false;
+                checkBox1.Checked = false;
+            }
+            else
+            {
+                Draw_Rectangle = false;
+            }
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            Rect_pickColor window = new Rect_pickColor();
+            window.ShowDialog();
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)

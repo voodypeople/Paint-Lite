@@ -66,20 +66,23 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.picDrawingSurface)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // picDrawingSurface
             // 
             this.picDrawingSurface.BackColor = System.Drawing.Color.White;
-            this.picDrawingSurface.Location = new System.Drawing.Point(51, 3);
+            this.picDrawingSurface.Location = new System.Drawing.Point(3, 3);
             this.picDrawingSurface.Name = "picDrawingSurface";
-            this.picDrawingSurface.Size = new System.Drawing.Size(950, 500);
+            this.picDrawingSurface.Size = new System.Drawing.Size(900, 450);
             this.picDrawingSurface.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.picDrawingSurface.TabIndex = 1;
             this.picDrawingSurface.TabStop = false;
@@ -146,7 +149,7 @@
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+N";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(175, 26);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
@@ -157,7 +160,7 @@
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeyDisplayString = "F3";
             this.openToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(175, 26);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -167,14 +170,14 @@
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeyDisplayString = "F2";
             this.saveToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(175, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(221, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(172, 6);
             // 
             // exitToolStripMenuItem
             // 
@@ -183,7 +186,7 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeyDisplayString = "Alt+X";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.X)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(175, 26);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -334,7 +337,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(459, 16);
+            this.label1.Location = new System.Drawing.Point(450, 5);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(109, 20);
             this.label1.TabIndex = 5;
@@ -352,7 +355,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(495, 36);
+            this.label4.Location = new System.Drawing.Point(481, 25);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(29, 20);
             this.label4.TabIndex = 7;
@@ -370,16 +373,16 @@
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.hScrollBar1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 569);
+            this.panel1.Location = new System.Drawing.Point(0, 606);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1100, 63);
+            this.panel1.Size = new System.Drawing.Size(1100, 55);
             this.panel1.TabIndex = 3;
             // 
             // label6
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(975, 32);
+            this.label6.Location = new System.Drawing.Point(973, 25);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(28, 20);
             this.label6.TabIndex = 9;
@@ -389,7 +392,7 @@
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(957, 1);
+            this.label5.Location = new System.Drawing.Point(955, 5);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(109, 20);
             this.label5.TabIndex = 8;
@@ -404,7 +407,7 @@
             this.panel3.Controls.Add(this.picDrawingSurface);
             this.panel3.Location = new System.Drawing.Point(40, 31);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1033, 532);
+            this.panel3.Size = new System.Drawing.Size(1033, 552);
             this.panel3.TabIndex = 5;
             // 
             // checkBox1
@@ -429,20 +432,43 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.checkBox2);
+            this.panel2.Controls.Add(this.pictureBox2);
             this.panel2.Controls.Add(this.pictureBox1);
             this.panel2.Controls.Add(this.checkBox1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 632);
+            this.panel2.Location = new System.Drawing.Point(0, 661);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1100, 49);
             this.panel2.TabIndex = 8;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(333, 16);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(142, 24);
+            this.checkBox2.TabIndex = 9;
+            this.checkBox2.Text = "Прямоугольник";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.IndianRed;
+            this.pictureBox2.Location = new System.Drawing.Point(251, 10);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(54, 27);
+            this.pictureBox2.TabIndex = 8;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(1100, 681);
+            this.ClientSize = new System.Drawing.Size(1100, 710);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.menuStrip1);
@@ -466,6 +492,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -509,5 +536,7 @@
         private CheckBox checkBox1;
         private PictureBox pictureBox1;
         private Panel panel2;
+        private CheckBox checkBox2;
+        private PictureBox pictureBox2;
     }
 }
